@@ -14,9 +14,11 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ url: tab.url })
         });
-        const html = await response.text();
+        const data = await response.json();
         statusDiv.className = "success";
-        statusDiv.innerHTML = html;
+        let text = 'Transcript:<p></p>' + data['transcript']
+        text = text + '<p></p>Comments:<p></p>' + data['transcript']
+        statusDiv.innerHTML = text;
     } catch (error) {
         statusDiv.className = "error";
         statusDiv.innerText = "Failed to connect to server.";
