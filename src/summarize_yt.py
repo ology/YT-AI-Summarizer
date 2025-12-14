@@ -7,7 +7,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 class YTSummarizer:
     def __init__(self):
         self.MAX = 128000 # openai tokens
-        self.client = OpenAI()
+        self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
         self.api_key = os.getenv('YOUTUBE_API_KEY')
 
     def extract_video_id(self, url):
