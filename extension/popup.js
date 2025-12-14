@@ -17,7 +17,7 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
         const data = await response.json();
         statusDiv.className = "success";
         let text = 'Transcript:<p></p>' + data['transcript']
-        text = text + '<p></p>Comments:<p></p>' + data['transcript']
+        text = text + '<p></p>Comments:<p></p>' + data['comments']
         statusDiv.innerHTML = text;
     } catch (error) {
         statusDiv.className = "error";
