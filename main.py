@@ -30,12 +30,12 @@ def read_form(request: Request):
 def submit_form(request: Request, url: Annotated[str, Form()]):
     print(f"Received form input: {url}")
     transcript, comments = summarize(url)
-    transcript = re.sub(r'\n', '<p></p>', transcript)
-    comments = re.sub(r'\n', '<p></p>', comments)
-    transcript = re.sub('### ', '', transcript)
-    comments = re.sub('### ', '', comments)
-    transcript = re.sub('**', '', transcript)
-    comments = re.sub('**', '', comments)
+    transcript = transcript.replace('\n', '<p></p>')
+    comments = comments.replace('\n', '<p></p>')
+    transcript = transcript.replace('### ', '')
+    comments = comments.replace('### ', '')
+    transcript = transcript.replace('**', '')
+    comments = comments.replace('**', '')
     return templates.TemplateResponse(request, "summary.html",
         { "transcript": transcript, "comments": comments }
     )
