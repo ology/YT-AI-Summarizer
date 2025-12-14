@@ -32,6 +32,10 @@ def submit_form(request: Request, url: Annotated[str, Form()]):
     t, c = summarize(url)
     transcript = re.sub(r'\n', '<p></p>', t)
     comments = re.sub(r'\n', '<p></p>', c)
+    transcript = re.sub('### ', '', transcript)
+    comments = re.sub('### ', '', comments)
+    transcript = re.sub('**', '', transcript)
+    comments = re.sub('**', '', comments)
     return templates.TemplateResponse(request, "summary.html",
         { "transcript": transcript, "comments": comments }
     )
