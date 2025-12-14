@@ -29,9 +29,9 @@ def read_form(request: Request):
 @app.post("/submit_form/")
 def submit_form(request: Request, url: Annotated[str, Form()]):
     print(f"Received form input: {url}")
-    t, c = summarize(url)
-    transcript = re.sub(r'\n', '<p></p>', t)
-    comments = re.sub(r'\n', '<p></p>', c)
+    transcript, comments = summarize(url)
+    transcript = re.sub(r'\n', '<p></p>', transcript)
+    comments = re.sub(r'\n', '<p></p>', comments)
     transcript = re.sub('### ', '', transcript)
     comments = re.sub('### ', '', comments)
     transcript = re.sub('**', '', transcript)
