@@ -1,8 +1,9 @@
-import re
 from typing import Annotated
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from src.summarize_yt import YTSummarizer
 
 def summarize(video_url):
@@ -12,15 +13,34 @@ def summarize(video_url):
     transcript_summary = None
     if transcript_text:
         transcript_summary = summ.summarize_text(transcript_text[:summ.MAX])
+        transcript_summary = transcript_summary.replace('\n', '<p></p>')
+        transcript_summary = transcript_summary.replace('### ', '')
+        transcript_summary = transcript_summary.replace('**', '')
     comments_summary = None
     comments = summ.get_video_comments(video_id)
     comment_text = " ".join(comments)
     if comment_text:
         comments_summary = summ.summarize_text(comment_text[:summ.MAX])
+        comments_summary = comments_summary.replace('\n', '<p></p>')
+        comments_summary = comments_summary.replace('### ', '')
+        comments_summary = comments_summary.replace('**', '')
+
     return transcript_summary, comments_summary
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+
+# allow the browser extension to send data to localhost
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class UrlData(BaseModel):
+    url: str
 
 @app.get("/", response_class=HTMLResponse)
 def read_form(request: Request):
@@ -30,12 +50,12 @@ def read_form(request: Request):
 def submit_form(request: Request, url: Annotated[str, Form()]):
     print(f"Received form input: {url}")
     transcript, comments = summarize(url)
-    transcript = transcript.replace('\n', '<p></p>')
-    comments = comments.replace('\n', '<p></p>')
-    transcript = transcript.replace('### ', '')
-    comments = comments.replace('### ', '')
-    transcript = transcript.replace('**', '')
-    comments = comments.replace('**', '')
     return templates.TemplateResponse(request, "summary.html",
         { "transcript": transcript, "comments": comments }
     )
+
+@app.post("/api/url")
+async def receive_url(data: UrlData):
+    print(f"Received URL: {data.url}")
+    transcript, comments = summarize(data.url)
+    return { "message": "URL summarized successfully", "transcript": transcript, "comments": comments }
