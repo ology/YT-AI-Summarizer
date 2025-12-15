@@ -6,6 +6,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from src.summarize_yt import YTSummarizer
 
+def sanitize(text):
+    text = text.replace('\n', '<p></p>')
+    text = text.replace('### ', '')
+    text = text.replace('**', '')
+    return text
+
 def summarize(video_url):
     summ = YTSummarizer()
     video_id = summ.extract_video_id(video_url)
@@ -13,18 +19,13 @@ def summarize(video_url):
     transcript_summary = None
     if transcript_text:
         transcript_summary = summ.summarize_text(transcript_text[:summ.MAX])
-        transcript_summary = transcript_summary.replace('\n', '<p></p>')
-        transcript_summary = transcript_summary.replace('### ', '')
-        transcript_summary = transcript_summary.replace('**', '')
+        transcript_summary = sanitize(transcript_summary)
     comments_summary = None
     comments = summ.get_video_comments(video_id)
     comment_text = " ".join(comments)
     if comment_text:
         comments_summary = summ.summarize_text(comment_text[:summ.MAX])
-        comments_summary = comments_summary.replace('\n', '<p></p>')
-        comments_summary = comments_summary.replace('### ', '')
-        comments_summary = comments_summary.replace('**', '')
-
+        comments_summary = sanitize(comments_summary)
     return transcript_summary, comments_summary
 
 app = FastAPI()
