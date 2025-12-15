@@ -1,4 +1,5 @@
-chrome.action.onClicked.addListener((tab) => {
+const xbrowser = globalThis.browser ?? globalThis.chrome;
+xbrowser.action.onClicked.addListener((tab) => {
     if (!tab.url) return;
 
     console.log("Sending URL:", tab.url);
