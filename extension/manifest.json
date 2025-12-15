@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Send URL to FastAPI",
+  "name": "Chrome YT Summarizer",
   "version": "1.0",
   "permissions": ["activeTab"],
   "host_permissions": [

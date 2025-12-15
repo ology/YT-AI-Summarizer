@@ -3,7 +3,9 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
     statusDiv.style.display = 'block';
     statusDiv.innerText = "Sending...";
     // get current active tab
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    // const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const xbrowser = globalThis.browser ?? globalThis.chrome;
+    const [tab] = await xbrowser.tabs.query({ active: true, currentWindow: true });
     if (!tab?.url) {
         statusDiv.innerText = "Error: No URL found";
         return;
