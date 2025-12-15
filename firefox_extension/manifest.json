@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Firefox YT Summarizer",
+  "version": "1.0",
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "YT Summarize"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["activeTab"]
+}
