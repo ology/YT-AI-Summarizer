@@ -11,9 +11,9 @@ chrome.action.onClicked.addListener((tab) => {
         body: JSON.stringify({ url: tab.url })
     })
     .then(response => response.json())
-    .then(data => {
-        console.log("Server response:", data);
-    })
+    // .then(data => {
+    //     console.log("Server response:", data);
+    // })
     .catch(error => {
         console.error("Error:", error);
     });
