@@ -1,7 +1,7 @@
 document.getElementById('sendBtn').addEventListener('click', async () => {
     const statusDiv = document.getElementById('result');
     statusDiv.style.display = 'block';
-    statusDiv.innerText = "Sending...";
+    statusDiv.innerText = "Summarizing...";
     // get current active tab
     // const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     const xbrowser = globalThis.browser ?? globalThis.chrome;
