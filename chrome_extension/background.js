@@ -12,7 +12,7 @@ chrome.action.onClicked.addListener((tab) => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Server response:", data);
+        // console.log("Server response:", data);
         chrome.action.setBadgeText({ text: "OK", tabId: tab.id });
         chrome.action.setBadgeBackgroundColor({ color: "#4CAF50" });
         setTimeout(() => {
