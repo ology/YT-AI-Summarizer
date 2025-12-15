@@ -25,33 +25,35 @@ class YTSummarizer:
             text = [ t.text for t in transcript_list.snippets ]
             return " ".join(text)
         except Exception as e:
-            print(f"Error fetching transcript: {e}")
+            # print(f"Error fetching transcript: {e}")
+            print("Error fetching transcript.")
             return None
 
     def get_video_comments(self, video_id):
         youtube = build('youtube', 'v3', developerKey=self.api_key)
         comments = []
         next_page_token = None
-
         while len(" ".join(comments)) < self.MAX:
-            video_response = youtube.commentThreads().list(
-                part='snippet',
-                videoId=video_id,
-                pageToken=next_page_token,
-                maxResults=100
-            ).execute()
-
-            for item in video_response['items']:
-                comment = item['snippet']['topLevelComment']['snippet']
-                text = comment['textOriginal']
-                comments.append(text)
-
-            # Check if there are more pages of comments
-            next_page_token = video_response.get('nextPageToken')
-            # If no next page token exists, the loop ends
-            if not next_page_token:
-                break
-
+            try:
+                video_response = youtube.commentThreads().list(
+                    part='snippet',
+                    videoId=video_id,
+                    pageToken=next_page_token,
+                    maxResults=100
+                ).execute()
+                for item in video_response['items']:
+                    comment = item['snippet']['topLevelComment']['snippet']
+                    text = comment['textOriginal']
+                    comments.append(text)
+                # Check if there are more pages of comments
+                next_page_token = video_response.get('nextPageToken')
+                # If no next page token exists, the loop ends
+                if not next_page_token:
+                    break
+            except Exception as e:
+                # print(f"Error getting comments: {e}")
+                print("Error getting comments")
+                return None
         return comments
 
     def summarize_text(self, text):

@@ -22,10 +22,11 @@ def summarize(video_url):
         transcript_summary = sanitize(transcript_summary)
     comments_summary = None
     comments = summ.get_video_comments(video_id)
-    comment_text = " ".join(comments)
-    if comment_text:
-        comments_summary = summ.summarize_text(comment_text[:summ.MAX])
-        comments_summary = sanitize(comments_summary)
+    if comments:
+        comment_text = " ".join(comments)
+        if comment_text:
+            comments_summary = summ.summarize_text(comment_text[:summ.MAX])
+            comments_summary = sanitize(comments_summary)
     return transcript_summary, comments_summary
 
 app = FastAPI()
