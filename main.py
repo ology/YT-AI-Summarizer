@@ -29,7 +29,7 @@ def summarize(video_url):
             comments_summary = sanitize(comments_summary)
     return transcript_summary, comments_summary
 
-app = FastAPI()
+app = FastAPI(openapi_url=None, docs_url=None, redoc_url=None)
 templates = Jinja2Templates(directory="templates")
 
 # allow the browser extension to send data to localhost
