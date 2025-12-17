@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -43,6 +44,11 @@ app.add_middleware(
 
 class UrlData(BaseModel):
     url: str
+
+FAVICON_PATH = "favicon.ico"
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse(FAVICON_PATH)
 
 @app.get("/", response_class=HTMLResponse)
 def read_form(request: Request):
